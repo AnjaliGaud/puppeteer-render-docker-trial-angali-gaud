@@ -4,8 +4,18 @@ const app = express();
 
 const PORT = process.env.PORT || 4000;
 
-app.get("/scrape", (req, res) => {
-  scrapeLogic(res);
+app.get("/scrape", async (req, res) => {
+  try {
+    const startTime = Date.now();
+    const result = await scrapeLogic();
+    const endTime = Date.now();
+    const totalTime = endTime - startTime;
+    console.log(`Scraping took ${totalTime} milliseconds.`);
+    res.send(`result: ${result}\nTime taken: ${totalTime}`);
+  } catch (error) {
+    console.log(error);
+    res.send(error);
+  }
 });
 
 app.get("/", (req, res) => {
